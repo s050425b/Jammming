@@ -1,6 +1,6 @@
 import React from "react";
 import "./SearchBar.css";
-import { getAccessToken } from "../../util/Spotify";
+import { getAccessToken, spotify } from "../../util/Spotify";
 
 export class SearchBar extends React.Component {
     constructor(props) {
@@ -10,8 +10,9 @@ export class SearchBar extends React.Component {
         this.handleTermChange = this.handleTermChange.bind(this);
     }
 
-    search(searchTerm) {
-        this.props.onSearch(searchTerm);
+    search() {
+        console.log(this.state.searchTerm);
+        this.props.onSearch(this.state.searchTerm);
     }
 
     handleTermChange(event) {
@@ -22,7 +23,7 @@ export class SearchBar extends React.Component {
         return (
             <div className="SearchBar">
                 <input placeholder="Enter A Song, Album, or Artist" onChange={this.handleTermChange} />
-                <button className="SearchButton" onClick={getAccessToken}>SEARCH</button>
+                <button className="SearchButton" onClick={this.search}>SEARCH</button>
             </div>
         );
     }

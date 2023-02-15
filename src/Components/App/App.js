@@ -4,20 +4,21 @@ import './App.css';
 import { SearchBar } from '../SearchBar/SearchBar';
 import { SearchResults } from '../SearchResult/SearchResults';
 import { Playlist } from '../Playlist/Playlist';
+import { spotify } from "../../util/Spotify";
 
 class App extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      searchResults: [{name: "Song1", artist: "Singing1", album: "album1", id: "1"}, 
-                      {name: "Song2", artist: "Singing2", album: "album2", id: "2"}, 
-                      {name: "Song3", artist: "Singing3", album: "album3", id: "3"}],
+      searchResults: [{name: "Song1", artist: "Singing1", album: "album1", id: "1", uri: "song1URI"}, 
+                      {name: "Song2", artist: "Singing2", album: "album2", id: "2", uri: "song2URI"}, 
+                      {name: "Song3", artist: "Singing3", album: "album3", id: "3", uri: "song3URI"}],
       
       playlistName: "My_Playlist",
 
-      playlistTracks: [{name: "Song4", artist: "Singing4", album: "album4", id: "4"}, 
-                       {name: "Song5", artist: "Singing5", album: "album5", id: "5"}, 
-                       {name: "Song6", artist: "Singing6", album: "album6", id: "6"}]
+      playlistTracks: [{name: "Song4", artist: "Singing4", album: "album4", id: "4", uri: "song4URI"}, 
+                       {name: "Song5", artist: "Singing5", album: "album5", id: "5", uri: "song5URI"}, 
+                       {name: "Song6", artist: "Singing6", album: "album6", id: "6", uri: "song6URI"}]
     }
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
@@ -56,8 +57,11 @@ class App extends React.Component{
   savePlaylist() {
   }
 
-  search(searchTerm) {
-    console.log(searchTerm);
+  async search(searchTerm) {
+    let returnArray = await spotify.search(searchTerm);
+    this.setState({
+      searchResults: returnArray
+    });
   }
 
   render() {
