@@ -52,9 +52,11 @@ class App extends React.Component{
     this.setState({
       playlistName: name
     });
+
   }
 
   savePlaylist() {
+    spotify.savePlaylist(this.state.playlistName, "1");
   }
 
   async search(searchTerm) {
