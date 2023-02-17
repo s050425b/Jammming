@@ -1,0 +1,32 @@
+.successView {
+    visibility: hidden;
+    position: fixed;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    top: 0px;
+    left: 0px;
+}
+
+.successView-wordBox {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-between;
+    align-items: center;
+    height: 75px;
+    z-index: 11;
+}
+
+.successView:after {
+    content: "";
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-color: gray;
+    opacity: 0.6;
+    z-index: 10;
+}

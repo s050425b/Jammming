@@ -3,28 +3,35 @@ import React from "react";
 import './App.css';
 import { SearchBar } from '../SearchBar/SearchBar';
 import { SearchResults } from '../SearchResult/SearchResults';
+import { SuccessView } from "../SuccessView/SuccessView";
 import { Playlist } from '../Playlist/Playlist';
 import { spotify } from "../../util/Spotify";
+import { NavBar } from "../NavBar/NavBar";
 
 class App extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      searchResults: [{name: "Song1", artist: "Singing1", album: "album1", id: "1", uri: "song1URI"}, 
-                      {name: "Song2", artist: "Singing2", album: "album2", id: "2", uri: "song2URI"}, 
-                      {name: "Song3", artist: "Singing3", album: "album3", id: "3", uri: "song3URI"}],
+      searchResults: [],
       
       playlistName: "My_Playlist",
 
-      playlistTracks: [{name: "Song4", artist: "Singing4", album: "album4", id: "4", uri: "song4URI"}, 
-                       {name: "Song5", artist: "Singing5", album: "album5", id: "5", uri: "song5URI"}, 
-                       {name: "Song6", artist: "Singing6", album: "album6", id: "6", uri: "song6URI"}]
+      playlistTracks: [],
+
+      showAddSuccess: false,
+
+      hasLogin: false,
+
+      displayName: null
     }
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.userLogin = this.userLogin.bind(this);
+    this.userLogout = this.userLogout.bind(this);
   }
 
   addTrack(track) {
@@ -56,7 +63,14 @@ class App extends React.Component{
   }
 
   savePlaylist() {
-    spotify.savePlaylist(this.state.playlistName, "1");
+    let uriArr = [];
+    for (let element of this.state.playlistTracks) {
+      uriArr.push(element.uri);
+    }
+    let isSuccess = spotify.savePlaylist(this.state.playlistName, uriArr);
+    this.setState({
+      showAddSuccess: isSuccess
+    });
   }
 
   async search(searchTerm) {
@@ -66,16 +80,50 @@ class App extends React.Component{
     });
   }
 
+  handleLogin() {
+    if (this.state.hasLogin){
+      this.userLogout();
+    } else {
+      this.userLogin();
+    }
+  }
+
+  async userLogin() {
+    spotify.getAccessToken();
+    let usrName = await spotify.getUserProfile();
+    this.setState({
+      hasLogin: true,
+      displayName: usrName
+    });
+    console.log(await spotify.getUserPlaylistsName());
+  }
+
+  userLogout() {
+    spotify.logout();
+    this.setState({
+      hasLogin: false,
+      displayName: null,
+      searchResults: [],
+      playlistName: "My_Playlist",
+      playlistTracks: []
+    });
+  }
+
+  componentDidMount() {
+    this.userLogin();
+  }
+
   render() {
     return (
       <div>
-        <h1>Ja<span className="highlight">mmm</span>ing</h1>
+        <NavBar hasLogin={this.state.hasLogin} onClick={this.handleLogin} userName={this.state.displayName} />
         <div className="App">
           <SearchBar onSearch={this.search} />
           <div className="App-playlist">
             <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack} />
             <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} onSave={this.savePlaylist} />
           </div>
+          <SuccessView show={this.state.showAddSuccess}/>
         </div>
       </div>
     );
