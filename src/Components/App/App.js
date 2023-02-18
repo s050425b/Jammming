@@ -13,8 +13,6 @@ class App extends React.Component{
     super(props);
     this.state = {
       searchResults: [],
-      
-      playlistName: "My_Playlist",
 
       playlistTracks: [],
 
@@ -22,7 +20,9 @@ class App extends React.Component{
 
       hasLogin: false,
 
-      displayName: null
+      displayName: null,
+
+      userPlaylist: []
     }
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
@@ -91,11 +91,13 @@ class App extends React.Component{
   async userLogin() {
     spotify.getAccessToken();
     let usrName = await spotify.getUserProfile();
+    let usrPlaylist = await spotify.getUserPlaylistsName();
+    console.log(usrPlaylist + "@#!");
     this.setState({
       hasLogin: true,
-      displayName: usrName
+      displayName: usrName,
+      userPlaylist: usrPlaylist
     });
-    console.log(await spotify.getUserPlaylistsName());
   }
 
   userLogout() {
@@ -121,7 +123,7 @@ class App extends React.Component{
           <SearchBar onSearch={this.search} />
           <div className="App-playlist">
             <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack} />
-            <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} onSave={this.savePlaylist} />
+            <Playlist userPlaylist={this.state.userPlaylist} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} onSave={this.savePlaylist} />
           </div>
           <SuccessView show={this.state.showAddSuccess}/>
         </div>
