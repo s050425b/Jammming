@@ -3,7 +3,7 @@ import { fetchSpotify } from "./apiFetchUtil";
 let accessToken;
 let expiresIn;
 const clientID = "d925661ca96240788ab4663997b0ed8d";
-const redirectURL = "https://rainbow-pika-951f3a.netlify.app/";
+const redirectURL = "https://rainbow-pika-951f3a.netlify.app";
 const spotify = {
     constructor() {
         this._userID = null;
