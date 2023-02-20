@@ -30,3 +30,7 @@
     opacity: 0.6;
     z-index: 10;
 }
+
+button:hover {
+    color: white;
+}
