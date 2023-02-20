@@ -66,6 +66,10 @@ class App extends React.Component{
   }
 
   savePlaylist() {
+    if (!this.state.playlistName) {
+      console.log("no playlist name");
+      return;
+    }
     let uriArr = [];
     for (let element of this.state.playlistTracks) {
       uriArr.push(element.uri);
