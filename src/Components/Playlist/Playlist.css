@@ -11,14 +11,54 @@
 }
   
 .Playlist input {
-    width: 100%;
+    box-sizing: border-box;
+    width: 80%;
     border: 0;
     outline: 0;
     background: transparent;
-    border-bottom: 1px solid #6f6f6f;
     font-family: 'Poppins', sans-serif;
-    font-size: 1.55rem;
     color: #fff;
+    display: inline-block;
+    font-size: 1.5rem;
+}
+
+.Playlist .playlist-input-div{
+    border-bottom: 1px solid #6f6f6f;
+    padding: 0;
+    height: 60px;
+}
+
+.Playlist .playlist-input-div button{
+    box-sizing: border-box;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    background-color: transparent;
+    color: white;
+    border: white 2px solid;
+    border-radius: 10px;
+}
+
+.Playlist .playlist-input-div button:hover {
+    color: grey;
+    border: grey 2px solid;
+}
+
+.Playlist .playlist-name-parent-div .playlist-dropdown {
+    width: 24%;
+    background-color: rgb(75, 0, 95);
+    position: absolute;
+}
+
+.Playlist .playlist-name-parent-div .playlist-dropdown-option {
+    color:white;
+    padding: 10px;
+}
+
+.Playlist .playlist-name-parent-div .playlist-dropdown-option:hover {
+    background-color: white;
+    color:black;
 }
   
 .Playlist-save {

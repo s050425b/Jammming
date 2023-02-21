@@ -6,7 +6,7 @@ export class LoginBtn extends React.Component {
 
     render() {
         return (
-            <button onClick={this.props.onClick}>{ this.props.hasLogin ? "Logout" : "Login" }</button>
+            <button className="round-btn LoginBtn" onClick={this.props.onClick}>{ this.props.hasLogin ? "Switch Account" : "Login" }</button>
         );
     }
 }

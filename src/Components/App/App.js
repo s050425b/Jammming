@@ -7,6 +7,7 @@ import { SuccessView } from "../SuccessView/SuccessView";
 import { Playlist } from '../Playlist/Playlist';
 import { spotify } from "../../util/Spotify";
 import { NavBar } from "../NavBar/NavBar";
+import { LoadingScreen } from "../LoadingScreen/LoadingScreen";
 
 class App extends React.Component{
   constructor(props) {
@@ -22,7 +23,11 @@ class App extends React.Component{
 
       displayName: null,
 
-      userPlaylist: []
+      userPlaylist: [],
+
+      playlistName: "New_Playlist",
+
+      isLoading: false
     }
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
@@ -31,7 +36,8 @@ class App extends React.Component{
     this.search = this.search.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.userLogin = this.userLogin.bind(this);
-    this.userLogout = this.userLogout.bind(this);
+    this.userSwitchAcc = this.userSwitchAcc.bind(this);
+    this.closeSuccessView = this.closeSuccessView.bind(this);
   }
 
   addTrack(track) {
@@ -49,12 +55,9 @@ class App extends React.Component{
     let playlistTracksArr = this.state.playlistTracks.filter( (element) => {
       return element.id !== track.id;
     });
+    console.log(playlistTracksArr);
     this.setState({
       playlistTracks: playlistTracksArr
-    });
-    let returnPlaylistTracks = this.state.playlistTracks;
-    this.setState({
-      playlistTracks: returnPlaylistTracks
     });
   }
 
@@ -62,14 +65,9 @@ class App extends React.Component{
     this.setState({
       playlistName: name
     });
-
   }
 
   savePlaylist() {
-    if (!this.state.playlistName) {
-      console.log("no playlist name");
-      return;
-    }
     let uriArr = [];
     for (let element of this.state.playlistTracks) {
       uriArr.push(element.uri);
@@ -80,16 +78,24 @@ class App extends React.Component{
     });
   }
 
+  closeSuccessView() {
+    this.setState({
+      showAddSuccess: false
+    });
+  }
+
   async search(searchTerm) {
+    this.setState({isLoading: true});
     let returnArray = await spotify.search(searchTerm);
     this.setState({
       searchResults: returnArray
     });
+    this.setState({isLoading: false});
   }
 
   handleLogin() {
     if (this.state.hasLogin){
-      this.userLogout();
+      this.userSwitchAcc();
     } else {
       this.userLogin();
     }
@@ -99,16 +105,16 @@ class App extends React.Component{
     spotify.getAccessToken();
     let usrName = await spotify.getUserProfile();
     let usrPlaylist = await spotify.getUserPlaylistsName();
-    console.log(usrPlaylist + "@#!");
+
     this.setState({
       hasLogin: true,
       displayName: usrName,
-      userPlaylist: usrPlaylist
+      userPlaylist: usrPlaylist,
+      playlistName: usrPlaylist[0]
     });
   }
 
-  userLogout() {
-    spotify.logout();
+  userSwitchAcc() {
     this.setState({
       hasLogin: false,
       displayName: null,
@@ -116,6 +122,8 @@ class App extends React.Component{
       playlistName: "My_Playlist",
       playlistTracks: []
     });
+    spotify.logout();
+    this.userLogin();
   }
 
   componentDidMount() {
@@ -130,10 +138,13 @@ class App extends React.Component{
           <SearchBar onSearch={this.search} />
           <div className="App-playlist">
             <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack} />
-            <Playlist userPlaylist={this.state.userPlaylist} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} onSave={this.savePlaylist} />
+            <Playlist playlistName={this.state.playlistName} userPlaylist={this.state.userPlaylist} 
+            playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack} 
+            onNameChange={this.updatePlaylistName} onSave={this.savePlaylist} />
           </div>
-          <SuccessView show={this.state.showAddSuccess}/>
+          <SuccessView closeSuccessView={this.closeSuccessView} show={this.state.showAddSuccess}/>
         </div>
+        <LoadingScreen isLoading={this.state.isLoading} />
       </div>
     );
   }

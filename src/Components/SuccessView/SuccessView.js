@@ -2,8 +2,15 @@ import React from "react";
 import "./SuccessView.css";
 
 export class SuccessView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    //close the successView
     handleClick() {
         document.getElementsByClassName("successView")[0].style.visibility = "hidden"; 
+        this.props.closeSuccessView();
     }
 
     componentDidUpdate() {
@@ -20,7 +27,7 @@ export class SuccessView extends React.Component {
             <div className="successView">
                 <div className="successView-wordBox">
                     <span>Tracks added!</span>
-                    <button onClick={this.handleClick}>Confirm</button>
+                    <button className="round-btn" onClick={this.handleClick}>Confirm</button>
                 </div>
             </div>
         );

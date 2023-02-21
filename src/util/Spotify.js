@@ -3,7 +3,7 @@ import { fetchSpotify } from "./apiFetchUtil";
 let accessToken;
 let expiresIn;
 const clientID = "d925661ca96240788ab4663997b0ed8d";
-const redirectURL = "https://rainbow-pika-951f3a.netlify.app";
+const redirectURL = "http://localhost:3000";
 const spotify = {
     constructor() {
         this._userID = null;
@@ -64,7 +64,6 @@ const spotify = {
     },
 
     logout() {
-        console.log("Logout");
         accessToken = null;
         expiresIn = null;
         window.history.pushState('Access Token', null, '/');
@@ -82,7 +81,6 @@ const spotify = {
 
 
     async getAccessToken() {
-        console.log(accessToken);
         let hasAccessToken = window.location.href.match(/access_token=([^&]*)/);
         let hasExpiresIn = window.location.href.match(/expires_in=([^&]*)/);
         if (accessToken) {
@@ -98,7 +96,6 @@ const spotify = {
             return accessToken;
         } else {
             window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURL}&show_dialog=true`;
-            
         }
     },
 

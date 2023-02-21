@@ -8,7 +8,7 @@
     background-color: #010c3f;
 }
 
-h1 {
+.NavBar h1 {
     padding: .77rem 0;
     text-align: center;
     font-family: 'Poppins', sans-serif;
@@ -16,11 +16,11 @@ h1 {
     color: #fff;
 }
   
-h1 .highlight {
+.NavBar h1 .highlight {
     color: #6c41ec;
 }
 
-.usernamme {
+.NavBar .usernamme {
     color: white;
     margin-right: 20px;
 }
