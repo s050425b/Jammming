@@ -2,9 +2,6 @@ import React from "react";
 import './LoadingScreen.css';
 
 export class LoadingScreen extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return(
