@@ -8,8 +8,8 @@ export class LoadingScreen extends React.Component {
 
     render() {
         return(
-            <div style={this.props.isLoading ? {visibility: "visible"} :{visibility: "hidden"}} className="LoadingScreen">
-                <div></div>
+            <div style={this.props.isLoading ? {visibility: "visible", animationPlayState: "running"} :{visibility: "hidden",  animationPlayState: "paused"}} className="LoadingScreen centerElement">
+                Loading
             </div>
         );
     }
